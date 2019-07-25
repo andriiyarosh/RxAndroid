@@ -1,14 +1,14 @@
 package com.cr9ck.rxandroid
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
+import io.reactivex.Single
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,6 +16,8 @@ class MainActivity : AppCompatActivity() {
         initListener()
         map()
         filter()
+        subscribeOn()
+        errorHandling()
     }
 
     private fun initListener() {
@@ -50,12 +52,47 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun filter() {
-        Observable.just(1,3,4,5)
+        Observable.just(1, 3, 4, 5)
 //            .filter{it>3}
-            .filter{it -> it>3}
+            .filter { it -> it > 3 }
             .subscribe {
                 Log.i("filter", it.toString())
             }
     }
+
+    private fun subscribeOn() {
+//        addDisposable(
+//        networkService                       // io Thread
+//            .getData()                       // io Thread
+//            .subscribeOn(Schedulers.io())    // change Thread
+//            .observeOn(Schedulers.computation()) // change Thread
+//            .map {                               // comp thread
+//                doSomething()                    // comp thread
+//            }                                    // comp thread
+//            .observeOn(AndroidSchedulers.mainThread()) // change Thread
+//            .subscribe{                                // ui thread
+//                updateView()                           // ui thread
+//            }                                          // ui thread
+//          )
+    }
+
+    private fun errorHandling() {
+        getSingle()
+            .doOnError { it ->
+                // do smthng
+            }
+            .subscribe(
+                { it ->
+                    {
+                        // handle onSucces
+                    }
+                },
+                { it ->
+                    // handle onError
+                }
+            )
+    }
+
+    private fun getSingle(): Single<Int> = Single.just(1)
 
 }
