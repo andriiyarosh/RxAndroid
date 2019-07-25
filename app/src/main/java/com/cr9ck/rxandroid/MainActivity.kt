@@ -2,7 +2,9 @@ package com.cr9ck.rxandroid
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.jakewharton.rxbinding2.view.RxView
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 
@@ -12,6 +14,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initListener()
+        map()
+        filter()
     }
 
     private fun initListener() {
@@ -34,4 +38,24 @@ class MainActivity : AppCompatActivity() {
         counter++
         counter2.text = counter.toString()
     }
+
+    private fun map() {
+        Observable.just(1, 3, 5, 7)
+            .map { number ->
+                number * 2
+            }
+            .subscribe {
+                Log.i("map", it.toString())
+            }
+    }
+
+    private fun filter() {
+        Observable.just(1,3,4,5)
+//            .filter{it>3}
+            .filter{it -> it>3}
+            .subscribe {
+                Log.i("filter", it.toString())
+            }
+    }
+
 }
